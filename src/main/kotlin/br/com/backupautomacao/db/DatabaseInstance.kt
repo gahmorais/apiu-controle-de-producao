@@ -2,6 +2,7 @@ package br.com.backupautomacao.db
 
 import io.ktor.server.util.*
 import org.ktorm.database.Database
+import org.ktorm.expression.SqlExpression
 import org.ktorm.logging.ConsoleLogger
 import org.ktorm.logging.LogLevel
 import org.ktorm.schema.*

@@ -32,6 +32,7 @@ fun Route.getUsers(userController: UserController) = get("/users") {
 
 fun Route.createUser(userController: UserController) = post("/users") {
   val user = call.receive<User>()
+
   if (user.name.isNullOrEmpty()) {
     call.respond(HttpStatusCode.BadRequest, Message("Nome inválido"))
     return@post

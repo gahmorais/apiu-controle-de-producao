@@ -10,3 +10,7 @@ fun Application.operationRoutes() {
 
   }
 }
+
+fun Route.getOperations() = get("/operations"){
+
+}
