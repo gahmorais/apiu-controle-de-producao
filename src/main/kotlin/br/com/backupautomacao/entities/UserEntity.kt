@@ -11,7 +11,7 @@ object Users : Table<Nothing>("t_users") {
 }
 
 data class User(
-  val id: Int?,
+  val id: Int? = 0,
   val name: String?,
   val password: String?
 )

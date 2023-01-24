@@ -10,17 +10,31 @@ class UserController {
   fun getUsers() = databaseInstance
     .from(Users)
     .select()
+    .map { row ->
+      val id = row[Users.id]
+      val name = row[Users.name]
+      val password = row[Users.password]
+      User(id, name, password)
+    }
 
-  fun getUserById(id: Int) = databaseInstance
+  fun getUserById(idUser: Int) = databaseInstance
     .from(Users)
     .select()
-    .where(Users.id eq id)
-    .limit(0,1)
+    .where(Users.id eq idUser)
+    .map { row ->
+      val id = row[Users.id]
+      val name = row[Users.name]
+      val password = row[Users.password]
+      User(id, name, password)
+    }[0]
 
 
   fun create(user: User) = databaseInstance
-    .insert(Users) {
+    .insertAndGenerateKey(Users) {
       set(it.name, user.name)
       set(it.password, encrypt(user.password!!))
-    }
+    } as Int
+
+  fun delete(id: Int) = databaseInstance
+    .delete(Users) { it.id eq id }
 }

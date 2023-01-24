@@ -6,6 +6,7 @@ import br.com.backupautomacao.entities.Users
 import br.com.backupautomacao.utils.Message
 import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -19,15 +20,16 @@ fun Application.userRoutes() {
   }
 }
 
-fun Route.getUsers(userController: UserController) = get("/users") {
-  val list = mutableListOf<User>()
-  userController.getUsers().forEach { row ->
-    val id = row[Users.id]
-    val name = row[Users.name]
-    val password = row[Users.password]
-    list.add(User(id, name, password))
+fun Route.getUserById(userController: UserController) = get("/users/{id}") {
+  val id = call.parameters["id"]
+  println("Parâmetro recebida $id")
+}
+
+fun Route.getUsers(userController: UserController) = authenticate("auth-basic") {
+  get("/users") {
+    val list = userController.getUsers()
+    call.respond(list)
   }
-  call.respond(list)
 }
 
 fun Route.createUser(userController: UserController) = post("/users") {
