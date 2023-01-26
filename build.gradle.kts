@@ -26,12 +26,12 @@ dependencies {
     //Database dependencies
     implementation("org.postgresql:postgresql:$postgres_driver_version")
     implementation("org.ktorm:ktorm-core:$ktorm_version")
+    implementation("org.ktorm:ktorm-support-postgresql:${ktorm_version}")
 
     //Log Depencies
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
     //Ktor Dependencies
-
     //Server
     implementation("io.ktor:ktor-server-core:$ktor_version")
     implementation("io.ktor:ktor-server-swagger:$ktor_version")

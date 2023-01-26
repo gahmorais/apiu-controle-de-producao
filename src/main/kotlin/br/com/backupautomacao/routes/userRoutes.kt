@@ -51,7 +51,7 @@ fun Route.createUser(userController: UserController) = post("/users") {
     return@post
   }
 
-  val result = userController.create(user)
+  val result = userController.createUser(user)
   if (result > 0) {
     call.respond(status = HttpStatusCode.Created, Message("Criado com sucesso"))
   } else {
