@@ -2,7 +2,6 @@ package br.com.backupautomacao.routes
 
 import br.com.backupautomacao.controller.UserController
 import br.com.backupautomacao.entities.User
-import br.com.backupautomacao.entities.Users
 import br.com.backupautomacao.utils.Message
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -10,19 +9,26 @@ import io.ktor.server.auth.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import org.ktorm.dsl.forEach
 
 fun Application.userRoutes() {
   val userController = UserController()
   routing {
+    getUserById(userController)
     getUsers(userController)
     createUser(userController)
   }
 }
 
-fun Route.getUserById(userController: UserController) = get("/users/{id}") {
-  val id = call.parameters["id"]
-  println("Parâmetro recebida $id")
+fun Route.getUserById(userController: UserController) = authenticate("auth-basic") {
+  get("/users/{id}") {
+    call.parameters["id"]?.toInt()?.let {
+      userController.getUserById(it)
+    }?.apply {
+      call.respond(this)
+    }
+    call.respond(status = HttpStatusCode.NotFound, Message("Usuário não encontrado"))
+
+  }
 }
 
 fun Route.getUsers(userController: UserController) = authenticate("auth-basic") {

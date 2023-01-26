@@ -17,16 +17,21 @@ class UserController {
       User(id, name, password)
     }
 
-  fun getUserById(idUser: Int) = databaseInstance
-    .from(Users)
-    .select()
-    .where(Users.id eq idUser)
-    .map { row ->
-      val id = row[Users.id]
-      val name = row[Users.name]
-      val password = row[Users.password]
-      User(id, name, password)
-    }[0]
+  fun getUserById(idUser: Int): User? {
+    val query = databaseInstance
+      .from(Users)
+      .select()
+      .where(Users.id eq idUser)
+    if (query.totalRecords > 0) {
+      return query.map { row ->
+        val id = row[Users.id]
+        val name = row[Users.name]
+        val password = row[Users.password]
+        User(id, name, password)
+      }[0]
+    }
+    return null
+  }
 
 
   fun create(user: User) = databaseInstance

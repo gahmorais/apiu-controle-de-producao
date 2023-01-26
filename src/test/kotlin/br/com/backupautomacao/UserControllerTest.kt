@@ -9,32 +9,39 @@ import kotlin.test.assertNotEquals
 
 class UserControllerTest {
   private val userController = UserController()
-  private val user = User(name = "Gabriel", password = encrypt("1234"))
-  private var userId: Int = 0
+  private val user = User(name = "Viviane", password = encrypt("1234"))
+  private var userId = 0
 
   @Test
-  fun createUserTest() {
+  fun `should insert user to database`() {
     userId = userController.create(user)
     assert(userId > 0)
   }
 
   @Test
-  fun getUserByIdTest() {
-    val userById = userController.getUserById(userId)
-    assertEquals(userById.name, user.name)
+  fun `should return user`() {
+    val userById = userController.getUserById(1)
+    assertEquals("Gabriel", userById?.name)
   }
 
   @Test
-  fun getUsers() {
+  fun `should return user null`() {
+    val userById = userController.getUserById(999)
+    assertEquals(userById, null)
+  }
+
+  @Test
+  fun `should return all users`() {
     val users = userController.getUsers()
     val lastId = users.size - 1
     assertEquals(users[lastId].name, user.name)
   }
 
   @Test
-  fun deleteTest() {
+  fun `should delete user`() {
     val users = userController.getUsers()
     val lastId = users.size - 1
-    assertNotEquals(users[lastId].name, user.name)
+    userController.delete(lastId)
+    assertNotEquals(lastId, user.id)
   }
 }
